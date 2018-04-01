@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        #login_box{
+            width:380px;
+            height:150px;
+            border:1px solid #000;
+            position:absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            padding-top:26px;
+        }
+        #face_img{
+            border-radius:50%;
+            position:absolute;
+            left:0;
+            right:0;
+            top:-66px;
+            margin: auto;
+        }
+        #login_box label:nth-child(1) input{
+            width:360px;
+            height:32px;
+            margin:7px;
+            outline:none;
+            text-indent:10px;
+            font-size:20px;
+            border-radius:2px;
+            border:1px solid #000;
+        }
+        #login_box section:nth-child(2) input{
+            width:80px;
+            height:30px;
+            font-size:20px;
+            font-family:"黑体";
+            margin:5px 52px;
+        }
+        #login_box label{
+            display:block;
+        }
+        #reg_box{
+            width:850px;
+            height:600px;
+            border:1px solid #000;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            display:none;
+        }
+        #reg_lef{
+            width:650px;
+            height:600px;
+            position: absolute;
+            left: 0;
+        }
+        #reg_rig{
+            border-left:1px solid #000;
+            width:199px;
+            height:600px;
+            position: absolute;
+            right: 0;
+            overflow:auto;
+        }
+        #reg_lef div:nth-child(1){
+            width:100%;
+            height:450px;
+            position: absolute;
+            top: 0;
+            overflow:auto;
+        }
+        #reg_lef div:nth-child(2){
+            border-top:1px solid #000;
+            width:100%;
+            height:149px;
+            position: absolute;
+            bottom: 0;
+        }
+        #send_btn{
+            width:80px;
+            height:40px;
+            font-size:22px;
+            font-family:'黑体';
+            background: #339bcd;
+            border:none;
+            border-radius:3px;
+            color:#f1f1f1;
+            position: absolute;
+            right: 20px;
+            bottom:10px;
+        }
+        #reg_list li{
+            padding:4px 8px;
+        }
+        #reg_list li img{
+            width:30px;
+            vertical-align:middle;
+        }
+        #reg_list li span{
+            font-size:20px;
+            padding-left:10px;
+        }
+        #rig_ol_list a,#rig_ol_list span{
+            display:block;
+            font-size:22px;
+            color:#000;
+        }
+        #rig_ol_list img{
+            width:30px;
+            vertical-align:middle;
+        }
+        #rig_ol_list em{
+            font-style:normal;
+        }
+        #rig_ol_list span{
+            padding:0 0 0 40px;
+        }
+        #rig_ol_list strong{
+            padding:0 12px;
+        }
+        #rig_ol_list li{
+            padding-left:10px;
+            padding-top:10px;
+        }
+        #rig_ol_list a{
+            text-decoration:none;
+        }
+    </style>
+    <script src="./ajax.js"></script>
+    <script>
+        function setScroll(obj){
+            obj.scrollTop=obj.scrollHeight;
+        }
+        function toDou(n){
+            return n<10?'0'+n:''+n;
+        }
+        window.onload=function(){
+            var oLoginBox=document.getElementById('login_box')
+            var oUser=document.getElementById('user');
+            var oPass=document.getElementById('pass');
+            var oLoginBtn=document.getElementById('login_btn');
+            var oRegBtn=document.getElementById('reg_btn');
+            var oRegBox=document.getElementById('reg_box');
+            var oRegList=document.getElementById('reg_list');
+            var oLefBox=document.getElementById('rig_ol_list');
+            var URL='http://zhinengshe.com/exercise/im/api.php';
+            var oFaceImg=document.getElementById('face_img');
+            var oSendBtn=document.getElementById('send_btn');
+            var oTxt=document.getElementById('txt');
+            var iNow=2;
+
+            oFaceImg.onclick=function(){
+                iNow%=8;
+                iNow++;
+                oFaceImg.src='./face/'+iNow+'.jpg'
+            };
+            //注册
+//          ?a=reg&user=用户名&pass=密码&face=头像ID&cb=xxx
+            oRegBtn.onclick=function(){
+                $.ajax({
+                    url:URL,
+                    data:{
+                        a:'reg',
+                        user:oUser.value,
+                        pass:oPass.value,
+                        face:iNow
+                    },
+                    type:'jsonp',
+                    success:function(data){
+                        if(data.err){
+                            alert('注册失败');
+                        }else{
+                            alert('注册成功');
+                        }
+                    }
+                })
+            };
+//      2.登录
+//          ?a=lgn&user=用户名&pass=密码&cb=xxx
+//          {err: 0, msg: "登录成功", face: 头像ID, login_time: 上次登录时间, token: "token"}
+
+            oLoginBtn.onclick=function(){
+                $.ajax({
+                    url:URL,
+                    data:{
+                        a:'lgn',
+                        user:oUser.value,
+                        pass:oPass.value
+                    },
+                    type:'jsonp',
+                    success:function(data){
+                        if(data.err){
+                            alert('登陆失败');
+                        }else{
+                            oLoginBox.style.display='none';
+                            oRegBox.style.display='block';
+                            alert('登陆成功');
+                            //获取用户列表
+                            getUserList(data.token);
+                            //获取用户聊天信息
+                            getMsg(data.token);
+                            //发言
+                            fnSend(data.token);
+                        }
+                    }
+                });
+            };
+
+//                ?a=get_user_list&token=&cb=xxx
+//            {err: 0, data: [{ID: 用户ID,username: 用户名,face: 用户头像}]}
+
+            function getUserList(token){
+                $.ajax({
+                    url:URL,
+                    data:{
+                        a:'get_user_list',
+                        token:token
+                    },
+                    type:'jsonp',
+                    success:function(json){
+                        var arr=json.data;
+
+                        for(var i=arr.length-30;i<arr.length;i++){
+                            var oLi=document.createElement('li');
+                            if(arr[i].face==0 || arr[i].face==null)arr[i].face=5;
+                            oLi.innerHTML='<img src="./face/'+arr[i].face+'.jpg" alt="1.jpg">'
+                                         +'<span>'+arr[i].username+'</span>';
+
+                            oRegList.appendChild(oLi);
+                        }
+                    }
+                })
+            }
+
+            function CreateMsg(id,content,face,time,username){
+                var oDate=new Date();
+                oDate.setTime(time*1000);
+                var str=oDate.getFullYear()+'-'+toDou(oDate.getMonth()+1)+'-'+toDou(oDate.getDate())+' '+toDou(oDate.getHours())+':'+toDou(oDate.getMinutes())+':'+toDou(oDate.getSeconds());
+                var oLi=document.createElement('li');
+                if(face==0 || face==null)face=5;
+
+                oLi.innerHTML='<a href="javascript:;">'
+                    +'<img src="./face/'+face+'.jpg" alt="">'
+                    +'<strong>'+username+'</strong>'
+                    +'<em>'+str+'</em>'
+                    +'</a>'
+                    +'<span>'+content+'</span>';
+                return oLi;
+            }
+
+//            4.获取聊天信息
+//                ?a=get_msg&token=&cb=xxx
+//            {err: 0, data: [{ID: 消息ID, post_time: 消息时间,content: 消息内容,username: 发言用户},...]}
+            function getMsg(token){
+                $.ajax({
+                    url:URL,
+                    data:{
+                        a:'get_msg',
+                        token:token
+                    },
+                    type:'jsonp',
+                    success:function(json){
+                        if(json.err){
+                            alert('获取失败');
+                        }else{
+                            var arr=json.data;
+
+                            for(var i=arr.length-30;i<arr.length;i++){
+                                var oLi=CreateMsg(arr[i].id,arr[i].content,arr[i].face,arr[i].post_time,arr[i].username);
+                                oLefBox.appendChild(oLi);
+                            }
+                            var oParent=oLefBox.parentNode;
+
+                            setScroll(oParent);
+                        }
+                    }
+                })
+            }
+//            3.发言
+//                ?a=snd_msg&content=内容&token=&cb=xxx
+//            {err: 0, time: 发布时间, ID: 消息ID}
+
+            function fnSend(token){
+                oSendBtn.onclick=function(){
+                    $.ajax({
+                        url:URL,
+                        data:{
+                            a:'snd_msg',
+                            content:oTxt.value,
+                            token:token
+                        },
+                        type:'jsonp',
+                        success:function(json){
+                            if(json.err){
+                                console.log('留言发表失败！');
+                            }else{
+                                var oLi=CreateMsg(json.ID,oTxt.value,iNow,json.time,oUser.value);
+                                oLefBox.appendChild(oLi);
+                                //滚动到最底部
+                                var oParent=oLefBox.parentNode;
+                                setScroll(oParent);
+
+                                oTxt.value='';
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+    </script>
+</head>
+<body>
+     <div id="login_box">
+         <label>
+             <input type="text" name="user" id="user">
+             <input type="text" name="pass" id="pass">
+         </label>
+         <section>
+             <input type="button" value="登录" id="login_btn">
+             <input type="button" value="注册" id="reg_btn">
+         </section>
+         <img id="face_img" src="./face/1.jpg" alt="">
+     </div>
+
+     <div id="reg_box">
+         <div id="reg_lef">
+             <div>
+                 <ol id="rig_ol_list">
+                     <li>
+                         <!--<a href="javascript:;">-->
+                             <!--<img src="./face/1.jpg" alt="">-->
+                             <!--<strong>xxxx</strong>-->
+                             <!--<em>2017-12-02 12:00:00</em>-->
+                         <!--</a>-->
+                         <!--<span>-->
+                             <!--xxxxxxxxxxxxxxxx-->
+                         <!--</span>-->
+                     </li>
+                 </ol>
+             </div>
+             <div>
+                 <textarea id="txt" style="width:650px; line-height:38px; font-size:22px; text-indent:20px; resize: none; height:148px; border:none;"></textarea>
+                 <input type="button" value="发送" id="send_btn">
+             </div>
+         </div>
+         <div id="reg_rig">
+             <ul id="reg_list">
+                 <!--<li>-->
+                     <!--<img src="./face/1.jpg" alt="1.jpg">-->
+                     <!--<span>xxxxx</span>-->
+                 <!--</li>-->
+             </ul>
+         </div>
+     </div>
+</body>
+</html>
