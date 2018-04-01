@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function jsonp(txt){
+
+            window.show=function (json){
+                console.log(json.s);
+            };
+
+            var oS=document.createElement('script');
+            var oHead=document.getElementsByTagName('head')[0];
+
+            oS.src='https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+txt+'&cb=show'
+
+            oHead.appendChild(oS);
+        }
+
+        window.onload=function(){
+            var oUl=document.getElementById('ul1');
+
+            var oT=document.getElementById('txt');
+
+            oT.onkeyup=function(){
+                var txt=oT.value;
+                jsonp(txt);
+            };
+        }
+
+    </script>
+    <!--<script id="s1" src="https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=b&cb=jsonp"></script>-->
+</head>
+<body>
+    <input type="text" name="" id="txt">
+    <ul id="ul1">
+    </ul>
+</body>
+</html>

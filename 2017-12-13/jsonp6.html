@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function jsonp(json){
+
+            window.onload=function(){
+                var oUl=document.getElementById('ul1');
+                var arr=json.s;
+
+                var oS=document.getElementById('s1');
+                var oT=document.getElementById('txt');
+
+                oT.onkeyup=function(){
+                    oS.src='https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+oT.value+'&cb=jsonp';
+
+                    console.log(json);
+                };
+
+                for(var i=0;i<arr.length;i++){
+                    var oLi=document.createElement('li');
+
+                    oLi.innerHTML=arr[i];
+
+                    oUl.appendChild(oLi);
+                }
+            }
+        }
+    </script>
+    <script id="s1" src="https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=b&cb=jsonp"></script>
+</head>
+<body>
+    <input type="text" name="" id="txt">
+    <ul id="ul1">
+    </ul>
+</body>
+</html>

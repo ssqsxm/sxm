@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function jsonp(url,txt,success){
+            var fnName='jsonp'+Math.random();
+            fnName=fnName.replace('.','');
+
+            window[fnName]=function (json){
+                success && success(json.s);
+            };
+
+            var oS=document.createElement('script');
+            var oHead=document.getElementsByTagName('head')[0];
+
+            oS.src=url+'?'+'wd='+txt+'&cb='+fnName+'';
+
+            oHead.appendChild(oS);
+        }
+
+        window.onload=function(){
+            var oUl=document.getElementById('ul1');
+
+            var oT=document.getElementById('txt');
+
+            oT.onkeyup=function(){
+                var txt=oT.value;
+                jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',txt,function(s){
+                    console.log(s);
+                },{
+                    wd:'sss'
+                },'cb');
+            };
+        }
+
+    </script>
+    <!--<script id="s1" src="https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=b&cb=jsonp"></script>-->
+</head>
+<body>
+    <input type="text" name="" id="txt">
+    <ul id="ul1">
+    </ul>
+</body>
+</html>
