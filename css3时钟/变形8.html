@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        #div1{
+            width:100px;
+            height:100px;
+            /*transform:rotate(20deg);*/
+            /*display:block;*/
+            background:red;
+        }
+        #div1:hover{
+            transform:translate(100px,100px);
+        }
+    </style>
+    <script>
+        setInterval(function(){
+            var oDiv=document.querySelector('#div1');
+
+            console.log(oDiv.offsetLeft);
+        },100)
+    </script>
+</head>
+<body>
+    <div id="div1">11111</div>
+</body>
+</html>

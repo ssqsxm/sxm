@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        #box{
+            width:200px;
+            height:200px;
+            border-radius:50%;
+            background:-webkit-radial-gradient(#fff,#000);
+            position:absolute;
+        }
+        #cap,#hour,#min,#sec{
+            position:absolute;
+            left:50%;
+            top:50%;
+        }
+        #min,#hour,#sec{
+            border-radius:50% 50% 0 0;
+        }
+        #cap{
+            width:20px;
+            height:20px;
+            border-radius:50%;
+            background:-webkit-radial-gradient(#fff,#000);
+            margin:-10px 0 0 -10px;
+        }
+        #hour{
+            width:6px;
+            height:40px;
+            background:-webkit-linear-gradient(#000,#fff);
+            margin:-40px 0 0 -3px;
+        }
+        #min{
+            width:4px;
+            height:60px;
+            background:#222;
+            margin:-60px 0 0 -2px;
+        }
+        #sec{
+            width:2px;
+            height:80px;
+            background:-webkit-linear-gradient(red,#fff7f7);
+            margin:-80px 0 0 -1px;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div id="hour"></div>
+        <div id="min"></div>
+        <div id="sec"></div>
+        <div id="cap"></div>
+    </div>
+</body>
+</html>

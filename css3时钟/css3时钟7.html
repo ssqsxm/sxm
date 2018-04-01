@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        #box{
+            width:200px;
+            height:200px;
+            border-radius:50%;
+            /*background:url(pan.png) no-repeat;*/
+            background-size:cover;
+            background:-webkit-radial-gradient(#fff,#000);
+            position:absolute;
+        }
+        #cap,#hour,#min,#sec{
+            position:absolute;
+            left:50%;
+            top:50%;
+        }
+        #min,#hour,#sec{
+            border-radius:50% 50% 0 0;
+            transform-origin:center bottom;
+        }
+        #cap{
+            width:20px;
+            height:20px;
+            border-radius:50%;
+            background:-webkit-radial-gradient(#fff,#000);
+            margin:-10px 0 0 -10px;
+        }
+        #hour{
+            width:6px;
+            height:40px;
+            background:-webkit-linear-gradient(#000,#fff);
+            margin:-40px 0 0 -3px;
+        }
+        #min{
+            width:4px;
+            height:60px;
+            background:#222;
+            margin:-60px 0 0 -2px;
+        }
+        #sec{
+            width:2px;
+            height:80px;
+            background:-webkit-linear-gradient(red,#fff7f7);
+            margin:-80px 0 0 -1px;
+            transform: rotate(10deg);
+        }
+        #box .ac,#box .now{
+            position:absolute;
+            left:50%;
+            background:#111;
+            transform-origin:center 100px;
+        }
+        #box .ac{
+            width:2px;
+            height:10px;
+            margin:0 0 0 -1px;
+        }
+        #box .now{
+            width:4px;
+            height:14px;
+            margin:0 0 0 -2px;
+        }
+        #box span strong{
+            position:absolute;
+            width:100px;
+            text-align:center;
+            left:50%;
+            margin-top:12px;
+            margin-left:-50px;
+        }
+    </style>
+    <script>
+        window.onload=function(){
+            var oBox=document.querySelector('#box');
+            var oH=document.querySelector('#hour');
+            var oM=document.querySelector('#min');
+            var oS=document.querySelector('#sec');
+
+            var N=60;
+            for(var i=0;i<N;i++){
+                var oSpan=document.createElement('span');
+                oSpan.style.transform='rotate('+i*6+'deg)';
+                if(i%5==0){
+                    oSpan.className='now';
+                    var n=i/5==0?12:i/5;
+                    oSpan.innerHTML='<strong>'+n+'</strong>';
+                    oSpan.children[0].style.transform='rotate('+-i*6+'deg)';
+                }else{
+                    oSpan.className='ac';
+                }
+
+                oBox.appendChild(oSpan);
+            }
+
+            function clock(){
+                var oDate=new Date();
+                var iH=oDate.getHours();
+                var iM=oDate.getMinutes();
+                var iS=oDate.getSeconds();
+                var iMS=oDate.getMilliseconds();
+
+                oH.style.transform='rotate('+(iH*30+iM/60*30)+'deg)';
+                oM.style.transform='rotate('+(iM*6+iS/60*6)+'deg)';
+                oS.style.transform='rotate('+(iS*6+iMS/1000*6)+'deg)';
+            }
+            clock();
+            setInterval(clock,30);
+
+        }
+    </script>
+</head>
+<body>
+    <input type="button" value="左" id="lef">
+    <input type="button" value="右" id="rig">
+    <div id="box">
+        <div id="hour"></div>
+        <div id="min"></div>
+        <div id="sec"></div>
+        <div id="cap"></div>
+    </div>
+</body>
+</html>

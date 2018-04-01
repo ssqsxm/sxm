@@ -1,0 +1,32 @@
+
+    transform
+
+        translate
+            translateX
+            translateY
+
+        rotate
+            rotateX
+            rotateY
+
+        scale
+            scaleX
+            scaleY
+        skew
+            skewX
+            skewY
+
+    注意
+        行内元素 变形上不能用
+
+            变形  块元素行内块元素
+
+    transform
+
+        多个值时候 后写的先执行
+
+            transform:scale(2,1) rotate(45deg)
+
+            transform:perspective(800)
+
+
